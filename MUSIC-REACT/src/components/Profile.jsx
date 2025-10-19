@@ -1,4 +1,3 @@
-
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
@@ -33,13 +32,23 @@ const Profile = () => {
   };
 
   return (
-    <Box className="container card" sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
+    <Box
+      sx={{
+        maxWidth: 400,
+        mx: 'auto',
+        mt: 4,
+        p: 4,
+        backgroundColor: '#ffffff', // box background white
+        borderRadius: 3,
+        boxShadow: '0 4px 10px rgba(0,0,0,0.08)',
+        color: 'inherit', // keeps text color normal
+      }}
+    >
       <Typography variant="h5" gutterBottom>
         <AccountCircleIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Profile
       </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField
-        className="input-field"
         label="Username"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
@@ -47,7 +56,6 @@ const Profile = () => {
         margin="normal"
       />
       <TextField
-        className="input-field"
         label="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -55,7 +63,6 @@ const Profile = () => {
         margin="normal"
       />
       <TextField
-        className="input-field"
         label="Password (optional)"
         type="password"
         value={password}
@@ -63,8 +70,12 @@ const Profile = () => {
         fullWidth
         margin="normal"
       />
-      <Typography variant="body1">Role: {user?.role}</Typography>
-      <Button className="btn" variant="contained" onClick={handleUpdate} sx={{ mt: 2 }}>
+      <Typography variant="body1" sx={{ mt: 1 }}>Role: {user?.role}</Typography>
+      <Button
+        variant="contained"
+        onClick={handleUpdate}
+        sx={{ mt: 2 }}
+      >
         Update Profile
       </Button>
     </Box>

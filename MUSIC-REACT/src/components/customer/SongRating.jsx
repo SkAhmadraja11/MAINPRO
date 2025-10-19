@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { addRating, getUserRatings, searchSongs } from '../../utils/api';
@@ -58,30 +57,43 @@ const SongRating = () => {
   };
 
   return (
-    <Box className="container card" sx={{ mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        <StarRateIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> My Ratings
+    <Box
+      sx={{
+        mt: 4,
+        p: 4,
+        backgroundColor: '#ffffff', // white box
+        borderRadius: 3,
+        boxShadow: '0 4px 10px rgba(0,0,0,0.08)',
+        color: 'inherit',
+      }}
+    >
+      <Typography 
+        variant="h4" 
+        gutterBottom
+        sx={{ color: '#ff4444' }} // text in #ff4444
+      >
+        <StarRateIcon sx={{ verticalAlign: 'middle', mr: 1, color: '#ff4444' }} /> My Ratings
       </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+
       <Box sx={{ mb: 2 }}>
         <TextField
-          className="input-field"
           label="Search Songs"
           value={songQuery}
           onChange={(e) => setSongQuery(e.target.value)}
           fullWidth
           margin="normal"
         />
-        <Button className="btn" variant="contained" onClick={handleSearchSongs} sx={{ mt: 2 }}>
+        <Button variant="contained" onClick={handleSearchSongs} sx={{ mt: 2 }}>
           Search Songs
         </Button>
       </Box>
+
       <Box sx={{ mb: 2 }}>
         <Typography variant="body1">Select Song:</Typography>
         {songs.map((song) => (
           <Button
             key={song.id}
-            className="btn"
             variant={selectedSongId === song.id ? 'contained' : 'outlined'}
             onClick={() => setSelectedSongId(song.id)}
             sx={{ m: 1 }}
@@ -96,17 +108,17 @@ const SongRating = () => {
           sx={{ mt: 2 }}
         />
         <TextField
-          className="input-field"
           label="Review"
           value={review}
           onChange={(e) => setReview(e.target.value)}
           fullWidth
           margin="normal"
         />
-        <Button className="btn" variant="contained" onClick={handleAddRating} sx={{ mt: 2 }}>
+        <Button variant="contained" onClick={handleAddRating} sx={{ mt: 2 }}>
           Add Rating
         </Button>
       </Box>
+
       <Table>
         <TableHead>
           <TableRow>

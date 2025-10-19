@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { getAllUsers, deleteUser } from '../../utils/api';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow, Button, Alert } from '@mui/material';
@@ -30,11 +29,20 @@ const UserManagement = () => {
   };
 
   return (
-    <Box className="container card" sx={{ mt: 4 }}>
+    <Box
+      sx={{
+        mt: 4,
+        p: 4,
+        backgroundColor: '#ffffff', // white box
+        borderRadius: 3,
+        boxShadow: '0 4px 10px rgba(0,0,0,0.08)',
+        color: 'inherit',
+      }}
+    >
       <Typography variant="h5" gutterBottom>
         <PersonIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> User Management
       </Typography>
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Table>
         <TableHead>
           <TableRow>
@@ -51,7 +59,7 @@ const UserManagement = () => {
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.role}</TableCell>
               <TableCell>
-                <Button className="btn" variant="contained" color="error" onClick={() => handleDelete(user.id)}>
+                <Button variant="contained" color="error" onClick={() => handleDelete(user.id)}>
                   Delete
                 </Button>
               </TableCell>

@@ -8,175 +8,165 @@ const SongManagement = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
-  const [type, setType] = useState("Title"); // Title | Artist | Genre
+  const [searchBy, setSearchBy] = useState("Title");
   const [genreFilter, setGenreFilter] = useState("All");
 
+  // Fetch songs
   useEffect(() => {
     axios
       .get("http://localhost:2057/api/songs")
       .then((res) => {
         setSongs(res.data);
         setFiltered(res.data);
-        setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setError("Failed to fetch songs from backend.");
-        setLoading(false);
-      });
+      .catch(() => setError("⚠️ Unable to load songs from the server."))
+      .finally(() => setLoading(false));
   }, []);
 
+  // Apply filters dynamically
   useEffect(() => {
-    applyFilters();
-    // eslint-disable-next-line
-  }, [query, type, genreFilter, songs]);
-
-  function applyFilters() {
     const q = query.trim().toLowerCase();
     let result = songs;
 
     if (genreFilter !== "All") {
-      result = result.filter((s) => (s.genre || "").toLowerCase() === genreFilter.toLowerCase());
+      result = result.filter(
+        (song) => (song.genre || "").toLowerCase() === genreFilter.toLowerCase()
+      );
     }
 
-    if (q.length > 0) {
-      result = result.filter((s) => {
-        const title = (s.title || "").toLowerCase();
-        const artist = (s.artist || "").toLowerCase();
-        const genre = (s.genre || "").toLowerCase();
-        if (type === "Title") return title.includes(q);
-        if (type === "Artist") return artist.includes(q);
-        if (type === "Genre") return genre.includes(q);
-        // fallback: search any
-        return title.includes(q) || artist.includes(q) || genre.includes(q);
+    if (q) {
+      result = result.filter((song) => {
+        const title = (song.title || "").toLowerCase();
+        const artist = (song.artist || "").toLowerCase();
+        const genre = (song.genre || "").toLowerCase();
+
+        switch (searchBy) {
+          case "Artist":
+            return artist.includes(q);
+          case "Genre":
+            return genre.includes(q);
+          default:
+            return title.includes(q);
+        }
       });
     }
 
     setFiltered(result);
-  }
+  }, [query, searchBy, genreFilter, songs]);
 
-  function getUniqueGenres() {
-    const set = new Set();
-    songs.forEach((s) => {
-      if (s.genre) set.add(s.genre);
-    });
-    return ["All", ...Array.from(set)];
-  }
+  // Extract unique genres
+  const getGenres = () => ["All", ...new Set(songs.map((s) => s.genre).filter(Boolean))];
 
-  function isSpotifyUrl(url) {
-    if (!url) return false;
-    return url.includes("open.spotify.com") || url.startsWith("spotify:");
-  }
+  // Spotify helpers
+  const isSpotifyUrl = (url) =>
+    url?.includes("open.spotify.com") || url?.startsWith("spotify:");
 
-  function getSpotifyEmbedUrl(url) {
-    // accepts open.spotify.com/track/{id}?..., spotify:track:{id}
-    try {
-      if (url.startsWith("spotify:")) {
-        const parts = url.split(":");
-        const id = parts[2];
-        return `https://open.spotify.com/embed/track/${id}`;
-      }
-      const m = url.match(/open\.spotify\.com\/track\/([a-zA-Z0-9]+)(\?|$)/);
-      if (m && m[1]) return `https://open.spotify.com/embed/track/${m[1]}`;
-    } catch (_) {}
-    return null;
-  }
+  const getSpotifyEmbedUrl = (url) => {
+    if (url.startsWith("spotify:")) {
+      const id = url.split(":")[2];
+      return `https://open.spotify.com/embed/track/${id}`;
+    }
+    const match = url.match(/open\.spotify\.com\/track\/([a-zA-Z0-9]+)/);
+    return match ? `https://open.spotify.com/embed/track/${match[1]}` : null;
+  };
 
   if (loading) return <p className="loading">Loading songs...</p>;
   if (error) return <p className="error">{error}</p>;
 
   return (
-    <div className="song-table-wrapper">
-      <div className="search-bar">
-        <div className="search-left">
+    <div className="song-page-wrapper">
+      <div className="song-page-content">
+        <div className="song-header">
           <input
+            type="text"
             className="search-input"
-            placeholder={`Search by ${type.toLowerCase()}...`}
+            placeholder={`Search by ${searchBy.toLowerCase()}...`}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-          <select value={type} onChange={(e) => setType(e.target.value)} className="type-select">
+
+          <select
+            className="search-select"
+            value={searchBy}
+            onChange={(e) => setSearchBy(e.target.value)}
+          >
             <option>Title</option>
             <option>Artist</option>
             <option>Genre</option>
           </select>
-        </div>
 
-        <div className="search-right">
-          <select value={genreFilter} onChange={(e) => setGenreFilter(e.target.value)} className="genre-select">
-            {getUniqueGenres().map((g) => (
-              <option key={g} value={g}>
-                {g}
-              </option>
+          <select
+            className="genre-select"
+            value={genreFilter}
+            onChange={(e) => setGenreFilter(e.target.value)}
+          >
+            {getGenres().map((g) => (
+              <option key={g}>{g}</option>
             ))}
           </select>
         </div>
-      </div>
 
-      <table className="song-table">
-        <thead>
-          <tr>
-            <th>Image</th>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Genre</th>
-            <th>Album</th>
-            <th>Play</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filtered.length === 0 ? (
+        <table className="song-table">
+          <thead>
             <tr>
-              <td colSpan="6" style={{ textAlign: "center", padding: "20px" }}>
-                No songs found
-              </td>
+              <th className="img-td">Cover</th>
+              <th>Title</th>
+              <th>Artist</th>
+              <th>Genre</th>
+              <th>Album</th>
+              <th className="play-td">Play</th>
             </tr>
-          ) : (
-            filtered.map((song, idx) => (
-              <tr key={idx}>
-                <td className="img-td">
-                  {song.imageUrl ? (
-                    <img src={song.imageUrl} alt={song.title} className="album-img" />
-                  ) : (
-                    <div className="placeholder-img">No Image</div>
-                  )}
-                </td>
-                <td>{song.title}</td>
-                <td>{song.artist}</td>
-                <td>{song.genre}</td>
-                <td>{song.album}</td>
-                <td className="play-td">
-                  {isSpotifyUrl(song.url) ? (
-                    (() => {
-                      const embed = getSpotifyEmbedUrl(song.url);
-                      if (embed) {
-                        return (
-                          <iframe
-                            title={`spotify-${idx}`}
-                            src={embed}
-                            width="200"
-                            height="80"
-                            frameBorder="0"
-                            allow="encrypted-media"
-                          />
-                        );
-                      } else {
-                        return <a href={song.url} target="_blank" rel="noreferrer">Open</a>;
-                      }
-                    })()
-                  ) : (
-                    // assume direct audio file (mp3, wav). If your url is to backend stream, ensure CORS for audio fetch.
-                    <audio controls preload="none">
-                      <source src={song.url} />
-                      Your browser does not support the audio element.
-                    </audio>
-                  )}
+          </thead>
+          <tbody>
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="no-data">
+                  No songs found 🎵
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              filtered.map((song, i) => (
+                <tr key={i}>
+                  <td data-label="Cover">
+                    {song.imageUrl ? (
+                      <img src={song.imageUrl} alt={song.title} className="song-img" />
+                    ) : (
+                      <div className="no-img">No Image</div>
+                    )}
+                  </td>
+                  <td data-label="Title">{song.title}</td>
+                  <td data-label="Artist">{song.artist}</td>
+                  <td data-label="Genre">{song.genre}</td>
+                  <td data-label="Album">{song.album}</td>
+                  <td data-label="Play">
+                    {isSpotifyUrl(song.url) ? (
+                      getSpotifyEmbedUrl(song.url) ? (
+                        <iframe
+                          src={getSpotifyEmbedUrl(song.url)}
+                          title={`spotify-${i}`}
+                          width="200"
+                          height="80"
+                          frameBorder="0"
+                          allow="encrypted-media"
+                        />
+                      ) : (
+                        <a href={song.url} target="_blank" rel="noreferrer">
+                          Open
+                        </a>
+                      )
+                    ) : (
+                      <audio controls>
+                        <source src={song.url} />
+                        Your browser does not support audio.
+                      </audio>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

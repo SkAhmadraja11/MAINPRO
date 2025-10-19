@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { createPlaylist, getUserPlaylists, addSongToPlaylist, deletePlaylist, searchSongs } from '../../utils/api';
-import { Box, Typography, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Alert, Paper } from '@mui/material';
+import { Box, Typography, TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Alert, Paper, Checkbox, FormControlLabel, Stack } from '@mui/material';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
 const Playlist = () => {
@@ -10,6 +10,7 @@ const Playlist = () => {
   const [name, setName] = useState('');
   const [songQuery, setSongQuery] = useState('');
   const [songs, setSongs] = useState([]);
+  const [selectedSongIds, setSelectedSongIds] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
@@ -42,7 +43,18 @@ const Playlist = () => {
       setPlaylists([...playlists, newPlaylist]);
       setName('');
       setError('');
+      // Attach selected songs to the newly created playlist
+      if (selectedSongIds.length > 0) {
+        try {
+          await Promise.all(selectedSongIds.map((songId) => addSongToPlaylist(newPlaylist.id, songId)));
+        } catch (err) {
+          // non-fatal: playlist created but some songs may not have been added
+          console.error('Failed to add some songs to playlist', err);
+          setError('Playlist created but failed to add some songs');
+        }
+      }
       setSuccess('Playlist created successfully!');
+      setSelectedSongIds([]);
       setTimeout(() => setSuccess(''), 3000);
     } catch (err) {
       setError('Failed to create playlist');
@@ -96,6 +108,13 @@ const Playlist = () => {
     }
   };
 
+  const toggleSelectSong = (songId) => {
+    setSelectedSongIds((prev) => {
+      if (prev.includes(songId)) return prev.filter((id) => id !== songId);
+      return [...prev, songId];
+    });
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleSearchSongs();
@@ -103,18 +122,18 @@ const Playlist = () => {
   };
 
   return (
-    <Box className="container" sx={{ mt: 4, p: 3 }}>
-      <Paper elevation={3} sx={{ p: 3 }}>
-        <Typography variant="h4" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold' }}>
+    <Box className="container" sx={{ mt: 4, p: 3, backgroundColor: '#ffffff' }}>
+      <Paper elevation={3} sx={{ p: 3, backgroundColor: '#ffffff' }}>
+        <Typography variant="h4" gutterBottom sx={{ color: '#ff6f61', fontWeight: 'bold' }}>
           <PlaylistAddIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '2rem' }} /> 
           My Playlists
         </Typography>
         
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-        {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+        {error && <Alert severity="error" sx={{ mb: 2, backgroundColor: '#ffffff' }}>{error}</Alert>}
+        {success && <Alert severity="success" sx={{ mb: 2, backgroundColor: '#ffffff' }}>{success}</Alert>}
 
         {/* Create Playlist Section */}
-        <Box sx={{ mb: 4, p: 2, backgroundColor: 'background.default', borderRadius: 2 }}>
+        <Box sx={{ mb: 4, p: 2, backgroundColor: '#ffffff', borderRadius: 2 }}>
           <Typography variant="h6" gutterBottom>Create New Playlist</Typography>
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <TextField
@@ -124,19 +143,46 @@ const Playlist = () => {
               fullWidth
               size="small"
               placeholder="Enter playlist name..."
+              sx={{ backgroundColor: '#ffffff' }}
             />
             <Button 
               variant="contained" 
               onClick={handleCreate}
-              sx={{ minWidth: '140px' }}
+              sx={{ minWidth: '140px', backgroundColor: '#ff6f61', '&:hover': { backgroundColor: '#e55a50' } }}
             >
               Create Playlist
             </Button>
           </Box>
         </Box>
 
+        {/* Search Results & Selection */}
+        {songs.length > 0 && (
+          <Box sx={{ mb: 4, p: 2, backgroundColor: '#ffffff', borderRadius: 2 }}>
+            <Typography variant="subtitle1" gutterBottom>Select songs to include in new playlist</Typography>
+            <Stack direction="column" spacing={1}>
+              {songs.map((song) => (
+                <FormControlLabel
+                  key={song.id}
+                  control={
+                    <Checkbox
+                      checked={selectedSongIds.includes(song.id)}
+                      onChange={() => toggleSelectSong(song.id)}
+                    />
+                  }
+                  label={`${song.title}${song.artist ? ` — ${song.artist}` : ''}`}
+                />
+              ))}
+            </Stack>
+            {selectedSongIds.length > 0 && (
+              <Typography variant="body2" sx={{ mt: 1 }}>
+                {selectedSongIds.length} song(s) selected to be added when creating the playlist.
+              </Typography>
+            )}
+          </Box>
+        )}
+
         {/* Search Songs Section */}
-        <Box sx={{ mb: 4, p: 2, backgroundColor: 'background.default', borderRadius: 2 }}>
+        <Box sx={{ mb: 4, p: 2, backgroundColor: '#ffffff', borderRadius: 2 }}>
           <Typography variant="h6" gutterBottom>Search Songs to Add</Typography>
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <TextField
@@ -147,11 +193,12 @@ const Playlist = () => {
               fullWidth
               size="small"
               placeholder="Enter song title..."
+              sx={{ backgroundColor: '#ffffff' }}
             />
             <Button 
-              variant="outlined" 
+              variant="contained" 
               onClick={handleSearchSongs}
-              sx={{ minWidth: '140px' }}
+              sx={{ minWidth: '140px', backgroundColor: '#ff6f61', '&:hover': { backgroundColor: '#e55a50' } }}
             >
               Search Songs
             </Button>
@@ -160,23 +207,23 @@ const Playlist = () => {
 
         {/* Playlists Table */}
         {playlists.length === 0 ? (
-          <Box sx={{ textAlign: 'center', p: 4 }}>
+          <Box sx={{ textAlign: 'center', p: 4, backgroundColor: '#ffffff' }}>
             <Typography variant="h6" color="textSecondary">
               No playlists yet. Create your first playlist above!
             </Typography>
           </Box>
         ) : (
-          <Table>
+          <Table sx={{ backgroundColor: '#ffffff' }}>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Playlist Name</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Songs</TableCell>
-                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem' }}>Actions</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem', backgroundColor: '#ffffff' }}>Playlist Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem', backgroundColor: '#ffffff' }}>Songs</TableCell>
+                <TableCell sx={{ fontWeight: 'bold', fontSize: '1.1rem', backgroundColor: '#ffffff' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {playlists.map((playlist) => (
-                <TableRow key={playlist.id} hover>
+                <TableRow key={playlist.id} hover sx={{ backgroundColor: '#ffffff' }}>
                   <TableCell>
                     <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
                       {playlist.name}
@@ -191,7 +238,6 @@ const Playlist = () => {
                         <Typography variant="body2" sx={{ mb: 1 }}>
                           {playlist.songs.map((song) => song.title).join(', ')}
                         </Typography>
-                        {/* Song Search Results for this playlist */}
                         {songs.length > 0 && (
                           <Box sx={{ mt: 2 }}>
                             <Typography variant="subtitle2" gutterBottom>
@@ -217,7 +263,7 @@ const Playlist = () => {
                         )}
                       </Box>
                     ) : (
-                      <Typography variant="body2" color="textSecondary">
+                      <Typography variant="body2" color="textSeco6ndary">
                         No songs in this playlist yet.
                         {songs.length > 0 && (
                           <Box sx={{ mt: 1 }}>
@@ -261,9 +307,8 @@ const Playlist = () => {
           </Table>
         )}
 
-        {/* Search Results Section (if no playlists exist) */}
         {playlists.length === 0 && songs.length > 0 && (
-          <Box sx={{ mt: 3, p: 2, backgroundColor: 'info.light', borderRadius: 2 }}>
+          <Box sx={{ mt: 3, p: 2, backgroundColor: '#ffffff', borderRadius: 2 }}>
             <Typography variant="h6" gutterBottom>
               Search Results
             </Typography>
@@ -273,7 +318,7 @@ const Playlist = () => {
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1 }}>
               {songs.map((song) => (
                 <Typography key={song.id} variant="body2" sx={{ 
-                  backgroundColor: 'white', 
+                  backgroundColor: '#ffffff', 
                   px: 1, 
                   py: 0.5, 
                   borderRadius: 1,

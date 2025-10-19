@@ -58,6 +58,7 @@ const SongSearch = () => {
                     audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
                     year: 2023
                 }
+                
             ]
         },
         {
@@ -115,6 +116,67 @@ const SongSearch = () => {
             type: "song",
             duration: "5:55"
         }
+        ,
+        { 
+            id: 4, 
+            name: "Stairway to Heaven", 
+            artist: "Led Zeppelin", 
+            genre: "Rock", 
+            album: "Led Zeppelin IV",
+            imageUrl: "/assets/stairway.jpg",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3",
+            year: 1971,
+            type: "song",
+            duration: "8:02"
+        },
+        { 
+            id: 5, 
+            name: "Hotel California", 
+            artist: "Eagles", 
+            genre: "Rock", 
+            album: "Hotel California",
+            imageUrl: "/assets/hotel-california.jpg",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+            year: 1976,
+            type: "song",
+            duration: "6:30"
+        },
+        { 
+            id: 6, 
+            name: "Imagine", 
+            artist: "John Lennon", 
+            genre: "Rock", 
+            album: "Imagine",
+            imageUrl: "/assets/imagine.jpg",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+            year: 1971,
+            type: "song",
+            duration: "3:03"
+        }
+        ,
+        { id: 7, name: "Tum Hi Ho", artist: "Arijit Singh", genre: "Hindi", album: "Aashiqui 2", imageUrl: "/assets/hindi1.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", year: 2013, type: "song", duration: "4:22" },
+        { id: 8, name: "Channa Mereya", artist: "Arijit Singh", genre: "Hindi", album: "Ae Dil Hai Mushkil", imageUrl: "/assets/hindi2.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", year: 2016, type: "song", duration: "4:45" },
+        { id: 9, name: "Kabira", artist: "Arijit Singh / Harshdeep Kaur", genre: "Hindi", album: "Yeh Jawaani Hai Deewani", imageUrl: "/assets/hindi3.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", year: 2013, type: "song", duration: "4:30" },
+        { id: 10, name: "Pee Loon", artist: "Mohit Chauhan", genre: "Hindi", album: "Once Upon a Time in Mumbaai", imageUrl: "/assets/hindi4.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", year: 2010, type: "song", duration: "4:00" },
+        { id: 11, name: "Bekhayali", artist: "Sachet Tandon", genre: "Hindi", album: "Kabir Singh", imageUrl: "/assets/hindi5.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", year: 2019, type: "song", duration: "4:15" },
+        { id: 12, name: "Lag Ja Gale", artist: "Lata Mangeshkar", genre: "Hindi", album: "Woh Kaun Thi", imageUrl: "/assets/hindi6.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", year: 1964, type: "song", duration: "3:20" },
+        { id: 13, name: "Tum Se Hi", artist: "Mohit Chauhan", genre: "Hindi", album: "Jab We Met", imageUrl: "/assets/hindi7.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", year: 2007, type: "song", duration: "4:10" },
+        { id: 14, name: "Kal Ho Naa Ho", artist: "Sonu Nigam", genre: "Hindi", album: "Kal Ho Naa Ho", imageUrl: "/assets/hindi8.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", year: 2003, type: "song", duration: "5:00" },
+        { id: 15, name: "Tujh Mein Rab Dikhta Hai", artist: "Roop Kumar Rathod", genre: "Hindi", album: "Rab Ne Bana Di Jodi", imageUrl: "/assets/hindi9.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", year: 2008, type: "song", duration: "4:12" },
+        { id: 16, name: "Humko Humise Chura Lo", artist: "Lata Mangeshkar / Udit Narayan", genre: "Hindi", album: "Mohabbatein", imageUrl: "/assets/hindi10.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", year: 2000, type: "song", duration: "4:35" }
+    ,
+    { id: 17, name: "Butta Bomma", artist: "Armaan Malik", genre: "Telugu", album: "Ala Vaikunthapurramuloo", imageUrl: "/assets/telugu1.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", year: 2020, type: "song", duration: "2:58" },
+    { id: 18, name: "Samajavaragamana", artist: "Sid Sriram", genre: "Telugu", album: "Ala Vaikunthapurramuloo", imageUrl: "/assets/telugu2.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", year: 2020, type: "song", duration: "3:45" },
+    { id: 19, name: "Srivalli", artist: "Vishal Mishra", genre: "Telugu", album: "Pushpa", imageUrl: "/assets/telugu3.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", year: 2021, type: "song", duration: "3:20" },
+    { id: 20, name: "Ramuloo Ramulaa", artist: "Anurag Kulkarni", genre: "Telugu", album: "Ala Vaikunthapurramuloo", imageUrl: "/assets/telugu4.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", year: 2020, type: "song", duration: "3:10" },
+    { id: 21, name: "Neeli Neeli Aakasam", artist: "Sid Sriram", genre: "Telugu", album: "30 Rojullo Preminchadam Ela", imageUrl: "/assets/telugu5.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3", year: 2020, type: "song", duration: "4:05" },
+    { id: 22, name: "Inkem Inkem Inkem Kaavaale", artist: "Sid Sriram", genre: "Telugu", album: "Geetha Govindam", imageUrl: "/assets/telugu6.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3", year: 2018, type: "song", duration: "3:50" },
+    { id: 23, name: "Vachinde", artist: "M. M. Keeravani", genre: "Telugu", album: "Fidaa", imageUrl: "/assets/telugu7.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", year: 2017, type: "song", duration: "3:25" },
+    { id: 24, name: "Ye Mera Jahan", artist: "Shreya Ghoshal", genre: "Telugu", album: "Saahasam Swaasaga Saagipo", imageUrl: "/assets/telugu8.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", year: 2016, type: "song", duration: "3:40" },
+    { id: 25, name: "Nee Kallathoti", artist: "Karthik", genre: "Telugu", album: "Manam", imageUrl: "/assets/telugu9.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", year: 2014, type: "song", duration: "3:55" },
+    { id: 26, name: "Rowdy Baby (Telugu version)", artist: "Dhanush / Shan Vincent de Paul", genre: "Telugu", album: "Maari 2 (Telugu)", imageUrl: "/assets/telugu10.jpg", audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", year: 2018, type: "song", duration: "3:10" }
+        
+        
     ];
 
     // Load playlists on component mount
@@ -327,6 +389,18 @@ const SongSearch = () => {
         return '▶ Play';
     };
 
+    // heading ref to toggle active class
+    const headerRef = useRef(null);
+
+    useEffect(() => {
+        // when component mounts, add the active class to main heading
+        const h = headerRef.current;
+        if (h) h.classList.add('search-active');
+        return () => {
+            if (h) h.classList.remove('search-active');
+        };
+    }, []);
+
     return (
         <div className="song-search-page">
             {/* Audio Player Bar */}
@@ -377,7 +451,7 @@ const SongSearch = () => {
 
             {/* Playlist Management Section */}
             <Box className="playlist-section" sx={{ mt: 2, p: 3, backgroundColor: 'background.paper', borderRadius: 2 }}>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom sx={{ color: '#ff6f61', fontWeight: '600' }}>
                     <PlaylistAddIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> My Playlists
                 </Typography>
                 
@@ -420,7 +494,7 @@ const SongSearch = () => {
 
             {/* Song Search Section */}
             <div className="search-header">
-                <h1>🔍 Song Search</h1>
+                <h1 ref={headerRef}>🔍 Song Search</h1>
                 <form onSubmit={handleSearch} className="search-form">
                     <div className="search-filters">
                         <select 

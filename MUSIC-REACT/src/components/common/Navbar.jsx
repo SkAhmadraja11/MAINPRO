@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ bgcolor: '#1e3c72' }}>
+    <AppBar position="static" sx={{ bgcolor: '#65bcbeff' }}>
       <Toolbar>
         <IconButton edge="start" color="inherit" component={Link} to="/">
           <MusicNoteIcon />

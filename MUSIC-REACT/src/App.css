@@ -1,10 +1,95 @@
+/* ========= Root Layout ========= */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  position: relative;
+  z-index: 3; /* above canvas and overlay */
+  color: #78dadb;
+  font-family: 'Poppins', sans-serif;
 }
 
+/* ========= App Background: Music Pattern ========= */
+body {
+  margin: 0;
+  min-height: 100vh;
+  /* customizable via CSS variables set from JS (defaults below) */
+  background-color: var(--body-bg-color, #260f2a); /* dark navy fallback */
+  /* Use the music-note SVG from public/ as a subtle tiled texture. The color in the SVG is very light with low opacity so it doesn't overpower content. */
+  background-image: url('/music-note.jpg');
+  background-repeat: repeat;
+  background-position: center;
+  background-size: 220px 220px; /* tile size for the pattern */
+  color: var(--text-color, #e6eef8);
+  overflow-x: hidden;
+}
+
+/* Gradient overlay layer by applying to the root element so content keeps contrast */
+#root::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  /* overlay is settable via CSS variable for light/dark variants */
+  background: var(--root-overlay, linear-gradient(180deg, rgba(14,21,47,0.55), rgba(7,12,25,0.65)));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ========= Navbar & Footer Always Visible ========= */
+nav, .navbar, footer {
+  position: relative;
+  z-index: 10;
+}
+
+/* ========= Card Section ========= */
+.card {
+  padding: 2em;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+}
+
+/* ========= Buttons (Grey with Classic Blue Hover) ========= */
+button, .btn {
+  background-color: #6b7280; /* grey tone */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+}
+
+button:hover, .btn:hover {
+  background-color: #2563eb; /* classic blue */
+  box-shadow: 0 0 10px rgba(37, 99, 235, 0.4);
+}
+
+/* ========= Inputs ========= */
+input, select, textarea {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #93c5fd;
+  border-radius: 6px;
+  color: #0f172a;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 6px rgba(37, 99, 235, 0.3);
+}
+
+/* ========= Logo ========= */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -12,31 +97,28 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  filter: drop-shadow(0 0 1.5em #2563eb);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ========= Scrollbar Style ========= */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.4);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.7);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Canvas 3D background layer - behind main content */
+.bg-3d-canvas {
+  z-index: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }

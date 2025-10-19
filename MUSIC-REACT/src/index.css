@@ -1,10 +1,13 @@
-
 body {
   font-family: 'Roboto', sans-serif;
-  background: linear-gradient(135deg, #1e3c72, #2a5298);
-  color: #ffffff;
+  /* Music-themed gradient background */
+  background: linear-gradient(135deg, #1e3c72, #2a5298); /* blue gradient */
+  color: #ffffff; /* text contrasts well on darker background */
   margin: 0;
   padding: 0;
+  background-image: url('https://www.transparenttextures.com/patterns/music-notes.png'); /* subtle music notes texture */
+  background-repeat: repeat;
+  background-size: 100px 100px;
 }
 
 .container {
@@ -14,16 +17,16 @@ body {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.95); /* slightly transparent white to show background */
   border-radius: 8px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 .btn {
@@ -42,17 +45,17 @@ body {
 }
 
 .input-field {
-  background: rgba(255, 255, 255, 0.2);
+  background: #f1f1f1; 
   border: none;
   border-radius: 4px;
   padding: 10px;
-  color: #fff;
+  color: #333333;
   width: 100%;
 }
 
 .input-field:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.3);
+  background: #eaeaea;
 }
 
 .error {
