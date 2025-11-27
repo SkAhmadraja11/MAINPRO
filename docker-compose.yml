@@ -1,50 +1,68 @@
 version: '3.8'
 
 services:
-  db:
-    image: mysql:8.0
-    container_name: ecommerce-db5
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: musicdb
-    volumes:
-      - mysql_data:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-    # If you need host access for Workbench/DBeaver, uncomment:
-    # ports:
-    #   - "3307:3306"          # host:container
-
   backend:
-    build: ./MUSIC-SPRINGBOOT
-    container_name: music-backend4
+    image: skahmadraja11/music-streaming-backend:latest
+    container_name: music-backend
     depends_on:
       db:
         condition: service_healthy
+        required: true
     environment:
-      SERVER_PORT: 2057
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/ecommerce?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      # Optional JPA hints:
-      # SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      # SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      JAVA_OPTS: -Xmx512m -Xms256m
+      SERVER_PORT: "2057"
+      SPRING_DATASOURCE_PASSWORD: music_password
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/musicdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: music_user
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      SPRING_JPA_SHOW_SQL: "false"
     ports:
-      - "2057:2057"           # backend reachable at http://localhost:8081
+      - "2057:2057"
     restart: unless-stopped
+
+  db:
+    container_name: music-db
+    environment:
+      MYSQL_DATABASE: musicdb
+      MYSQL_PASSWORD: music_password
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: music_user
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - -h
+        - 127.0.0.1
+        - -uroot
+        - -proot
+      timeout: 5s
+      interval: 10s
+      retries: 5
+      start_period: 30s
+    image: mysql:8.0
+    restart: unless-stopped
+    volumes:
+      - mysql_data:/var/lib/mysql
 
   frontend:
-    build: ./MUSIC-REACT
+    image: skahmadraja11/music-streaming-frontend:latest
     container_name: music-frontend
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+        required: true
+    environment:
+      REACT_APP_API_URL: http://backend:2057
     ports:
-      - "3000:80"             # frontend at http://localhost:3000
+      - "3000:80"
     restart: unless-stopped
-    # If your nginx.conf proxies /api to the backend, it will reach service name "backend" on port 8081
+
+networks:
+  default:
+    name: mainpro_default
 
 volumes:
-  mysql_data: {}
+  mysql_data:
+    name: mainpro_mysql_data
