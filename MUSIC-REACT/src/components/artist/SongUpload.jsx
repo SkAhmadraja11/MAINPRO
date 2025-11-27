@@ -16,7 +16,7 @@ const SongUpload = () => {
 
   const handleUpload = async () => {
     if (!title || !artist || !url) {
-      setError('Title, artist, and URL are required');
+      setError('Please provide title, artist and a valid URL');
       return;
     }
     try {
@@ -35,7 +35,7 @@ const SongUpload = () => {
   return (
     <Box className="container card" sx={{ mt: 4 }}>
       <Typography variant="h5" gutterBottom>
-        <UploadIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Upload Song
+        <UploadIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Share Your Track
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <TextField
@@ -79,7 +79,7 @@ const SongUpload = () => {
         margin="normal"
       />
       <Button className="btn" variant="contained" onClick={handleUpload} sx={{ mt: 2 }}>
-        Upload
+        Publish Track
       </Button>
     </Box>
   );

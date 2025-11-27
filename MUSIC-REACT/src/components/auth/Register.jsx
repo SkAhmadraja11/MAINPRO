@@ -17,11 +17,11 @@ const Register = () => {
 
   const handleRegister = async () => {
     if (!username || !password || !email || !role) {
-      setError('All fields are required');
+      setError('Please complete all fields to create your account');
       return;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Invalid email format');
+      setError('Please provide a valid email address');
       return;
     }
     try {
@@ -29,14 +29,14 @@ const Register = () => {
       login(userData);
       navigate(`/${userData.role.toLowerCase()}`);
     } catch (err) {
-      setError('Registration failed');
+      setError('Registration failed — please try again later');
     }
   };
 
   return (
     <Box className="container card" sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
       <Typography variant="h5" gutterBottom>
-        <PersonAddIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Register
+        <PersonAddIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Join MelodyCloud — create your free account
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <TextField
@@ -78,7 +78,7 @@ const Register = () => {
         <MenuItem value="ADMIN">Admin</MenuItem>
       </TextField>
       <Button className="btn" variant="contained" onClick={handleRegister} sx={{ mt: 2 }}>
-        Register
+        Create Account
       </Button>
     </Box>
   );

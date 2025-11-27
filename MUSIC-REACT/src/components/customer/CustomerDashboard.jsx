@@ -26,10 +26,10 @@ const CustomerDashboard = () => {
       }}
     >
       <Typography variant="h4" gutterBottom>
-        <MusicNoteIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Customer Dashboard
+        <MusicNoteIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Welcome to MelodyCloud
       </Typography>
       <Button variant="contained" component={Link} to="/customer/search" sx={buttonStyle}>
-        Search Songs
+        Explore Songs
       </Button>
       <Button variant="outlined" component={Link} to="/customer/playlists" sx={buttonStyle}>
         My Playlists

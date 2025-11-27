@@ -70,27 +70,28 @@ const SongRating = () => {
       <Typography 
         variant="h4" 
         gutterBottom
-        sx={{ color: '#ff4444' }} // text in #ff4444
+        sx={{ color: '#ff4444' }}
       >
-        <StarRateIcon sx={{ verticalAlign: 'middle', mr: 1, color: '#ff4444' }} /> My Ratings
+        <StarRateIcon sx={{ verticalAlign: 'middle', mr: 1, color: '#ff4444' }} /> Your Ratings & Reviews
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
       <Box sx={{ mb: 2 }}>
         <TextField
-          label="Search Songs"
+          label="Find a song"
+          placeholder="Type a song title or artist"
           value={songQuery}
           onChange={(e) => setSongQuery(e.target.value)}
           fullWidth
           margin="normal"
         />
         <Button variant="contained" onClick={handleSearchSongs} sx={{ mt: 2 }}>
-          Search Songs
+          Find Songs
         </Button>
       </Box>
 
       <Box sx={{ mb: 2 }}>
-        <Typography variant="body1">Select Song:</Typography>
+        <Typography variant="body1">Pick a song to rate:</Typography>
         {songs.map((song) => (
           <Button
             key={song.id}
@@ -115,7 +116,7 @@ const SongRating = () => {
           margin="normal"
         />
         <Button variant="contained" onClick={handleAddRating} sx={{ mt: 2 }}>
-          Add Rating
+          Submit Rating
         </Button>
       </Box>
 

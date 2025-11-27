@@ -40,7 +40,7 @@ const UserManagement = () => {
       }}
     >
       <Typography variant="h5" gutterBottom>
-        <PersonIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> User Management
+        <PersonIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> User Accounts
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Table>

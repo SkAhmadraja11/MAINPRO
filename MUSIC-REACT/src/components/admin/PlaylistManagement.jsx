@@ -35,7 +35,7 @@ const PlaylistManagement = () => {
   return (
     <Box className="container card" sx={{ mt: 4 }}>
       <Typography variant="h5" gutterBottom sx={{ color: '#ff6f61', fontWeight: '600' }}>
-        <PlaylistAddIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Playlist Management
+        <PlaylistAddIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Playlist Manager
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <Table>

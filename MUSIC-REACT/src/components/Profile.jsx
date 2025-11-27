@@ -15,11 +15,11 @@ const Profile = () => {
 
   const handleUpdate = async () => {
     if (!username || !email) {
-      setError('Username and email are required');
+      setError('Please provide a valid username and email');
       return;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError('Invalid email format');
+      setError('Please enter a valid email address');
       return;
     }
     try {
@@ -45,25 +45,25 @@ const Profile = () => {
       }}
     >
       <Typography variant="h5" gutterBottom>
-        <AccountCircleIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Profile
+        <AccountCircleIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Your Profile Hub
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <TextField
-        label="Username"
+        label="Display Name"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         fullWidth
         margin="normal"
       />
       <TextField
-        label="Email"
+        label="Email Address"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         fullWidth
         margin="normal"
       />
       <TextField
-        label="Password (optional)"
+        label="New Password (optional)"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -76,7 +76,7 @@ const Profile = () => {
         onClick={handleUpdate}
         sx={{ mt: 2 }}
       >
-        Update Profile
+        Save Changes
       </Button>
     </Box>
   );

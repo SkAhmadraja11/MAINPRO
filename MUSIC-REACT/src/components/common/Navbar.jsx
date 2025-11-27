@@ -21,58 +21,58 @@ const Navbar = () => {
           <MusicNoteIcon />
         </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
-          Music Streaming App
+          MelodyCloud — Stream & Share
         </Typography>
         {user ? (
           <>
-            <Button color="inherit" component={Link} to={`/${user.role.toLowerCase()}`}>
-              Dashboard
+              <Button color="inherit" component={Link} to={`/${user.role.toLowerCase()}`}>
+              Home
             </Button>
-            <Button color="inherit" component={Link} to="/profile">
-              Profile
+              <Button color="inherit" component={Link} to="/profile">
+              My Hub
             </Button>
             {user.role === 'ADMIN' && (
               <>
                 <Button color="inherit" component={Link} to="/admin/users">
-                  Users
+                  Manage Users
                 </Button>
                 <Button color="inherit" component={Link} to="/admin/songs">
-                  Songs
+                  Manage Songs
                 </Button>
                 <Button color="inherit" component={Link} to="/admin/playlists">
-                  Playlists
+                  Manage Playlists
                 </Button>
               </>
             )}
             {user.role === 'CUSTOMER' && (
               <>
                 <Button color="inherit" component={Link} to="/customer/search">
-                  Search
+                  Explore
                 </Button>
                 <Button color="inherit" component={Link} to="/customer/playlists">
-                  Playlists
+                  My Playlists
                 </Button>
                 <Button color="inherit" component={Link} to="/customer/ratings">
-                  Ratings
+                  My Ratings
                 </Button>
               </>
             )}
             {user.role === 'ARTIST' && (
               <Button color="inherit" component={Link} to="/artist/upload">
-                Upload Song
-              </Button>
+                  Upload
+                </Button>
             )}
             <Button color="inherit" onClick={handleLogout}>
-              Logout
+              Sign Out
             </Button>
           </>
         ) : (
           <>
             <Button color="inherit" component={Link} to="/login">
-              Login
+              Sign In
             </Button>
             <Button color="inherit" component={Link} to="/register">
-              Register
+              Get Started
             </Button>
           </>
         )}

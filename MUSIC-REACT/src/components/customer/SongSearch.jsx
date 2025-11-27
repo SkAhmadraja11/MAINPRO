@@ -23,6 +23,35 @@ const SongSearch = () => {
     const [progress, setProgress] = useState(0);
     const [volume, setVolume] = useState(1);
     const audioRef = useRef(new Audio());
+
+    // Sound effect audio (auto-play per song)
+    const effectAudioRef = useRef(new Audio());
+
+    // Default effects mapped by genre (used automatically when a song plays)
+    const defaultEffectByGenre = {
+        pop: { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3', loop: true },
+        rock: { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', loop: true },
+        hindi: { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3', loop: true },
+        telugu: { url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3', loop: true },
+        default: { url: '', loop: false }
+    };
+
+    const getDefaultEffectForSong = (song) => {
+        if (!song) return defaultEffectByGenre.default;
+        const g = (song.genre || '').toLowerCase();
+        return defaultEffectByGenre[g] || defaultEffectByGenre.default;
+    };
+        // Ensure effect audio is stopped when component unmounts
+        useEffect(() => {
+            return () => {
+                try {
+                    effectAudioRef.current.pause();
+                    effectAudioRef.current.src = '';
+                } catch (e) {
+                    // ignore
+                }
+            };
+        }, []);
     
     // Playlist States
     const [playlists, setPlaylists] = useState([]);
@@ -246,21 +275,40 @@ const SongSearch = () => {
     const handlePlaySong = (song) => {
         if (currentSong && currentSong.id === song.id) {
             if (isPlaying) {
+                // pause both main song and its effect
                 audioRef.current.pause();
+                try {
+                    effectAudioRef.current.pause();
+                } catch (e) {}
                 setIsPlaying(false);
             } else {
-                audioRef.current.play();
-                setIsPlaying(true);
+                // resume both main song and its effect (if any)
+                audioRef.current.play().then(() => {
+                    setIsPlaying(true);
+                }).catch(err => {
+                    console.error('Resume play failed:', err);
+                });
+                try {
+                    if (effectAudioRef.current.src) {
+                        effectAudioRef.current.play().catch(() => {});
+                    }
+                } catch (e) {}
             }
         } else {
             if (currentSong) {
                 audioRef.current.pause();
+                // stop previous effect as well
+                try {
+                    effectAudioRef.current.pause();
+                    effectAudioRef.current.currentTime = 0;
+                } catch (e) {}
             }
-            
+
             setCurrentSong(song);
             audioRef.current.src = song.audioUrl;
             audioRef.current.volume = volume;
-            
+
+            // play song
             audioRef.current.play()
                 .then(() => {
                     setIsPlaying(true);
@@ -269,6 +317,18 @@ const SongSearch = () => {
                     console.error('Error playing song:', error);
                     setPlaylistError('Error playing song. Please try again.');
                 });
+
+            // determine and play matching effect automatically
+            const effect = getDefaultEffectForSong(song);
+            if (effect && effect.url) {
+                effectAudioRef.current.src = effect.url;
+                effectAudioRef.current.loop = !!effect.loop;
+                effectAudioRef.current.volume = Math.min(0.6, volume); // keep effect slightly lower
+                effectAudioRef.current.play().catch(err => {
+                    // log but don't block song playback
+                    console.warn('Effect play failed:', err);
+                });
+            }
         }
     };
 
@@ -297,6 +357,11 @@ const SongSearch = () => {
         const handleEnded = () => {
             setIsPlaying(false);
             setProgress(0);
+            // stop any playing effect when main song ends
+            try {
+                effectAudioRef.current.pause();
+                effectAudioRef.current.currentTime = 0;
+            } catch (e) {}
         };
 
         audio.addEventListener('timeupdate', updateProgress);
@@ -330,8 +395,16 @@ const SongSearch = () => {
         }
 
         if (selectedType !== 'all') {
+            // normalize selectedType to singular form (in case UI or older values used plurals)
+            const normalize = (t) => {
+                if (!t) return t;
+                // if it ends with 's' and is longer than 1, strip the trailing 's' (simple heuristic)
+                if (t.length > 1 && t.endsWith('s')) return t.slice(0, -1);
+                return t;
+            };
+            const typeKey = normalize(selectedType).toLowerCase();
             filteredSongs = filteredSongs.filter(song =>
-                song.type === selectedType
+                (song.type || '').toLowerCase() === typeKey
             );
         }
 
@@ -494,7 +567,7 @@ const SongSearch = () => {
 
             {/* Song Search Section */}
             <div className="search-header">
-                <h1 ref={headerRef}>🔍 Song Search</h1>
+                <h1 ref={headerRef}>🔎 Find Your Next Favorite Track</h1>
                 <form onSubmit={handleSearch} className="search-form">
                     <div className="search-filters">
                         <select 
@@ -503,10 +576,10 @@ const SongSearch = () => {
                             className="filter-select"
                         >
                             <option value="all">All Types</option>
-                            <option value="songs">Songs</option>
-                            <option value="artists">Artists</option>
-                            <option value="albums">Albums</option>
-                            <option value="playlists">Playlists</option>
+                            <option value="song">Songs</option>
+                            <option value="artist">Artists</option>
+                            <option value="album">Albums</option>
+                            <option value="playlist">Playlists</option>
                         </select>
                         
                         <select 
@@ -527,17 +600,17 @@ const SongSearch = () => {
                     <div className="search-bar">
                         <input
                             type="text"
-                            placeholder="Search for songs, artists, albums..."
+                            placeholder="Try 'Blinding Lights' or an artist name"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             className="search-input"
                         />
                         <button type="submit" className="search-btn" disabled={loading}>
-                            {loading ? 'Searching...' : 'SEARCH'}
+                            {loading ? 'Discovering...' : 'Discover'}
                         </button>
                         {hasSearched && (
                             <button type="button" onClick={handleReset} className="reset-btn">
-                                Clear
+                                Reset
                             </button>
                         )}
                     </div>
@@ -593,6 +666,7 @@ const SongSearch = () => {
                                                 >
                                                     ＋ Add to Playlist
                                                 </button>
+                                                {/* effect UI removed: effects now play automatically by genre */}
                                             </div>
                                         </div>
                                     ))}
@@ -601,8 +675,7 @@ const SongSearch = () => {
                         ))
                     ) : (
                         <div className="no-results">
-                            <p>No songs found matching your search criteria.</p>
-                            <p>Try different keywords or filters.</p>
+                            <p>No tracks found — try different keywords or filters.</p>
                         </div>
                     )}
                 </div>
@@ -611,7 +684,7 @@ const SongSearch = () => {
             {/* Recommended Songs Section */}
             {!hasSearched && (
                 <div className="recommended-section">
-                    <h2>Recommended Songs</h2>
+                    <h2>Handpicked For You</h2>
                     {recommendedSongs.length > 0 ? (
                         recommendedSongs.map((category, index) => (
                             <div key={index} className="category-section">
@@ -654,14 +727,14 @@ const SongSearch = () => {
                             </div>
                         ))
                     ) : (
-                        <p className="no-results">No recommendations available.</p>
+                        <p className="no-results">No recommendations available right now.</p>
                     )}
                 </div>
             )}
 
             {/* Add to Playlist Dialog */}
             <Dialog open={addToPlaylistDialog.open} onClose={closeAddToPlaylistDialog}>
-                <DialogTitle>Add to Playlist</DialogTitle>
+                <DialogTitle>Add to Playlist — Choose where</DialogTitle>
                 <DialogContent>
                     <Typography variant="body1" gutterBottom>
                         Add "{addToPlaylistDialog.song?.name}" to:
@@ -684,7 +757,7 @@ const SongSearch = () => {
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={closeAddToPlaylistDialog}>Cancel</Button>
+                    <Button onClick={closeAddToPlaylistDialog}>Close</Button>
                 </DialogActions>
             </Dialog>
         </div>

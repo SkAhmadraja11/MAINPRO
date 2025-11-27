@@ -15,7 +15,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      setError('Username and password are required');
+      setError('Please enter your username and password to continue');
       return;
     }
     try {
@@ -23,19 +23,20 @@ const Login = () => {
       login(userData);
       navigate(`/${userData.role.toLowerCase()}`);
     } catch (err) {
-      setError('Invalid credentials');
+      setError("Oops — we couldn't sign you in. Check your details and try again.");
     }
   };
 
   return (
     <Box className="container card" sx={{ maxWidth: 400, mx: 'auto', mt: 4 }}>
       <Typography variant="h5" gutterBottom>
-        <LoginIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Login
+        <LoginIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Welcome back — let's groove!
       </Typography>
       {error && <Alert severity="error">{error}</Alert>}
       <TextField
         className="input-field"
-        label="Username"
+        label="Username or Email"
+        placeholder="e.g. melodyfan92"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         fullWidth
@@ -44,6 +45,7 @@ const Login = () => {
       <TextField
         className="input-field"
         label="Password"
+        placeholder="Your secret groove"
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -51,7 +53,7 @@ const Login = () => {
         margin="normal"
       />
       <Button className="btn" variant="contained" onClick={handleLogin} sx={{ mt: 2 }}>
-        Login
+        Sign In & Play
       </Button>
     </Box>
   );

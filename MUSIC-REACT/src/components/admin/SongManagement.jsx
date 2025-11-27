@@ -121,7 +121,7 @@ const SongManagement = () => {
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan="6" className="no-data">
-                  No songs found 🎵
+                  No songs found — try adjusting filters.
                 </td>
               </tr>
             ) : (

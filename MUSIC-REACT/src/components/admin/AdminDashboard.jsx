@@ -15,7 +15,7 @@ const AdminDashboard = () => {
       }}
     >
       <Typography variant="h4" gutterBottom>
-        <AdminPanelSettingsIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Admin Dashboard
+        <AdminPanelSettingsIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Admin Control — MelodyCloud
       </Typography>
       <Button
         className="btn"
@@ -24,7 +24,7 @@ const AdminDashboard = () => {
         to="/admin/users"
         sx={{ m: 1 }}
       >
-        Manage Users
+        User Accounts
       </Button>
       <Button
         className="btn"
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
         to="/admin/songs"
         sx={{ m: 1 }}
       >
-        Manage Songs
+        Song Library
       </Button>
       <Button
         className="btn"
@@ -42,7 +42,7 @@ const AdminDashboard = () => {
         to="/admin/playlists"
         sx={{ m: 1 }}
       >
-        Manage Playlists
+        Playlists
       </Button>
     </Box>
   );

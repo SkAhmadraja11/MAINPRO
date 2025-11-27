@@ -38,7 +38,7 @@ const QuickImportSong = ({ defaultUrl }) => {
   return (
     <Box className="container card" sx={{ mt: 4, p: 3 }}>
       <Typography variant="h5" gutterBottom>
-        <PublishIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Quick Import Song
+        <PublishIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Quick Song Import
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
@@ -48,7 +48,7 @@ const QuickImportSong = ({ defaultUrl }) => {
       <TextField label="Album" value={album} onChange={(e) => setAlbum(e.target.value)} fullWidth margin="normal" />
       <TextField label="URL" value={url} onChange={(e) => setUrl(e.target.value)} fullWidth margin="normal" />
       <Button variant="contained" onClick={handleImport} sx={{ mt: 2, backgroundColor: '#ff6f61', '&:hover': { backgroundColor: '#e55a50' } }}>
-        Import Song
+        Import
       </Button>
     </Box>
   );

@@ -126,7 +126,7 @@ const Playlist = () => {
       <Paper elevation={3} sx={{ p: 3, backgroundColor: '#ffffff' }}>
         <Typography variant="h4" gutterBottom sx={{ color: '#ff6f61', fontWeight: 'bold' }}>
           <PlaylistAddIcon sx={{ verticalAlign: 'middle', mr: 1, fontSize: '2rem' }} /> 
-          My Playlists
+          My Playlists — Mix & Share
         </Typography>
         
         {error && <Alert severity="error" sx={{ mb: 2, backgroundColor: '#ffffff' }}>{error}</Alert>}
@@ -142,7 +142,7 @@ const Playlist = () => {
               onChange={(e) => setName(e.target.value)}
               fullWidth
               size="small"
-              placeholder="Enter playlist name..."
+              placeholder="e.g. Chill Vibes"
               sx={{ backgroundColor: '#ffffff' }}
             />
             <Button 
@@ -150,7 +150,7 @@ const Playlist = () => {
               onClick={handleCreate}
               sx={{ minWidth: '140px', backgroundColor: '#ff6f61', '&:hover': { backgroundColor: '#e55a50' } }}
             >
-              Create Playlist
+              Create & Jam
             </Button>
           </Box>
         </Box>
@@ -183,7 +183,7 @@ const Playlist = () => {
 
         {/* Search Songs Section */}
         <Box sx={{ mb: 4, p: 2, backgroundColor: '#ffffff', borderRadius: 2 }}>
-          <Typography variant="h6" gutterBottom>Search Songs to Add</Typography>
+          <Typography variant="h6" gutterBottom>Find Songs to Add</Typography>
           <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
             <TextField
               label="Search Songs"
@@ -192,7 +192,7 @@ const Playlist = () => {
               onKeyPress={handleKeyPress}
               fullWidth
               size="small"
-              placeholder="Enter song title..."
+              placeholder="Search by title, artist or album"
               sx={{ backgroundColor: '#ffffff' }}
             />
             <Button 
@@ -209,7 +209,7 @@ const Playlist = () => {
         {playlists.length === 0 ? (
           <Box sx={{ textAlign: 'center', p: 4, backgroundColor: '#ffffff' }}>
             <Typography variant="h6" color="textSecondary">
-              No playlists yet. Create your first playlist above!
+              No playlists yet — make your first mixtape and share the vibe!
             </Typography>
           </Box>
         ) : (

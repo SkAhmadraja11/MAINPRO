@@ -7,10 +7,10 @@ const ArtistDashboard = () => {
   return (
     <Box className="container card" sx={{ mt: 4 }}>
       <Typography variant="h4" gutterBottom>
-        <MusicNoteIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Artist Dashboard
+        <MusicNoteIcon sx={{ verticalAlign: 'middle', mr: 1 }} /> Artist Studio
       </Typography>
       <Button className="btn" variant="contained" component={Link} to="/artist/upload" sx={{ m: 1 }}>
-        Upload Song
+        Upload New Track
       </Button>
     </Box>
   );
